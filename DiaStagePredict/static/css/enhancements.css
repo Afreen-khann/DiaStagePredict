@@ -1,0 +1,531 @@
+/* Frontend UX Enhancements for DiaStagePredict - Professional Theme */
+
+/* ===== Professional Color Palette ===== */
+:root {
+    --primary-color: #4F46E5; /* Indigo */
+    --primary-dark: #3730A3;
+    --primary-light: #6366F1;
+    --secondary-color: #06B6D4; /* Cyan */
+    --accent-color: #8B5CF6; /* Purple */
+    --success-color: #10B981; /* Green */
+    --warning-color: #F59E0B; /* Amber */
+    --danger-color: #EF4444; /* Red */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Validation Error Styles ===== */
+.validation-error {
+    border-color: var(--danger-color) !important;
+    border-width: 2px;
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.validation-message {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.validation-message::before {
+    content: "⚠";
+    font-size: 1rem;
+}
+
+/* ===== Tooltip Styles ===== */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-icon:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    color: #1f2937;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(79, 70, 229, 0.1);
+    width: 250px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tooltip-description {
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+}
+
+.tooltip-range {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-style: italic;
+    padding: 0.25rem 0.5rem;
+    background: rgba(79, 70, 229, 0.05);
+    border-radius: 0.25rem;
+    display: inline-block;
+}
+
+/* ===== Progress Bar Styles ===== */
+.progress-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    animation: slideDown 0.5s ease-out;
+}
+
+.progress-bar-wrapper {
+    width: 100%;
+    height: 2rem;
+    background-color: #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated shimmer effect on progress bar */
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.progress-text {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.progress-message {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* ===== Loading Spinner Styles ===== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #10b981;
+    border-right-color: #059669;
+    border-radius: 50%;
+    animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-message {
+    color: white;
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+    font-weight: 500;
+    animation: pulse 2s ease-in-out infinite;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===== Button Interaction States ===== */
+button, .btn {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease !important;
+    position: relative;
+}
+
+button:hover, .btn:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+    filter: brightness(1.05) !important;
+}
+
+button:active, .btn:active {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+    filter: brightness(0.95) !important;
+}
+
+/* ===== Form Field Focus States ===== */
+input, select, textarea {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: #059669 !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+}
+
+input:hover:not(:focus), select:hover:not(:focus), textarea:hover:not(:focus) {
+    border-color: #6ee7b7 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ===== Hint Text Styles ===== */
+.hint-text {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* ===== Page Transition Styles ===== */
+.page-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Card Entrance Animations ===== */
+/* Removed - was causing layout issues */
+
+/* ===== Staggered Form Field Animations ===== */
+form > div {
+    animation: fadeInUp 0.4s ease-out backwards;
+}
+
+form > div:nth-child(1) { animation-delay: 0.05s; }
+form > div:nth-child(2) { animation-delay: 0.1s; }
+form > div:nth-child(3) { animation-delay: 0.15s; }
+form > div:nth-child(4) { animation-delay: 0.2s; }
+form > div:nth-child(5) { animation-delay: 0.25s; }
+form > div:nth-child(6) { animation-delay: 0.3s; }
+form > div:nth-child(7) { animation-delay: 0.35s; }
+form > div:nth-child(8) { animation-delay: 0.4s; }
+form > div:nth-child(9) { animation-delay: 0.45s; }
+form > div:nth-child(10) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Navigation Link Hover Effects ===== */
+nav > div > div > ul a {
+    position: relative;
+    transition: color 0.2s;
+}
+
+nav > div > div > ul > li > a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #6ee7b7;
+    transition: width 0.3s ease-in-out;
+}
+
+nav > div > div > ul > li > a:hover::after {
+    width: 100%;
+}
+
+/* ===== Mobile Responsiveness ===== */
+@media (max-width: 767px) {
+    input, select, textarea, button {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        min-height: 44px; /* Touch target size */
+    }
+    
+    .tooltip {
+        width: 200px;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ===== Accessibility: Focus Indicators ===== */
+*:focus-visible {
+    outline: 2px solid #059669;
+    outline-offset: 2px;
+}
+
+/* ===== Error Banner Styles ===== */
+.error-banner {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.error-banner-text {
+    color: #991b1b;
+    font-weight: 500;
+}
+
+.error-banner-close {
+    background: none;
+    border: none;
+    color: #991b1b;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Comparison Chart Styles ===== */
+.comparison-chart {
+    margin-top: 1.5rem;
+}
+
+.chart-bar {
+    margin-bottom: 1rem;
+}
+
+.chart-label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-bar-container {
+    width: 100%;
+    height: 2rem;
+    background-color: #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.chart-bar-fill {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.chart-bar-fill.in-range {
+    background-color: #10b981;
+}
+
+.chart-bar-fill.out-of-range {
+    background-color: #ef4444;
+}
+
+.chart-range-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+/* ===== Recommendations Styles ===== */
+.recommendations-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background-color: #f0fdf4;
+    border-radius: 0.5rem;
+    border-left: 3px solid #059669;
+}
+
+.recommendation-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.recommendation-text {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.recommendation-category {
+    font-weight: 600;
+    color: #047857;
+    margin-bottom: 0.25rem;
+}
+
+/* ===== Form Field Grouping ===== */
+.field-group {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== BMI Calculator Styles ===== */
+.bmi-calculator-section {
+    background-color: #ecfdf5;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #a7f3d0;
+    margin-bottom: 1rem;
+}
+
+.bmi-result {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #059669;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* ===== Smooth Transitions ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Override for specific elements that need different timing */
+.progress-bar-fill,
+.chart-bar-fill,
+.tooltip {
+    transition-duration: 300ms;
+}
+
+/* ===== Scroll-triggered animations removed - no hidden content ===== */
+
+
+/* Nav link underline hover is defined earlier in the file */

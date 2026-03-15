@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About | DiaStagePredict</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}?v=7.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    {% include 'navbar.html' %}
+
+    <!-- HERO — always visible -->
+    <section class="bg-emerald-900 text-white">
+        <div class="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
+            <div class="hero-content">
+                <h1 class="text-4xl font-bold">About DiaStagePredict</h1>
+                <p class="mt-4 text-emerald-200 text-lg leading-relaxed">
+                    DiaStagePredict is an AI-powered diabetes risk prediction platform designed to support early
+                    awareness and preventive health decisions — combining data science and evidence-based healthcare principles.
+                </p>
+            </div>
+            <div class="hero-content-delay flex justify-center">
+                <img src="{{ url_for('static', filename='images/bg/bg (2).jpg') }}" alt="Diabetes awareness"
+                    class="hero-parallax rounded-xl shadow-xl object-cover max-h-80">
+            </div>
+        </div>
+    </section>
+
+    <!-- PURPOSE -->
+    <section class="max-w-6xl mx-auto px-6 mt-10 bg-white p-8 rounded-2xl shadow sr">
+        <h2 class="text-3xl font-bold text-center text-emerald-900">Why DiaStagePredict Exists</h2>
+        <p class="mt-4 text-gray-700 leading-relaxed text-center">
+            Diabetes often develops gradually — many individuals don't notice symptoms until complications appear.
+            DiaStagePredict helps detect potential risk indicators early by analyzing lifestyle and health-related data
+            using machine learning models. It is not a diagnostic tool, but a supportive system to encourage informed
+            healthcare consultation and proactive lifestyle awareness.
+        </p>
+    </section>
+
+    <!-- INFO CARDS -->
+    <section class="max-w-7xl mx-auto px-6 mt-10 mb-16">
+        <div class="grid md:grid-cols-3 gap-6 sr-stagger">
+
+            <div class="bg-emerald-50 p-6 rounded-xl shadow card-hover sr">
+                <h3 class="text-xl font-semibold text-emerald-900">Our Mission</h3>
+                <p class="mt-2 text-gray-700 leading-relaxed">
+                    To empower individuals with accessible AI-driven health insights that inspire prevention-focused living,
+                    awareness, and timely medical guidance.
+                </p>
+            </div>
+
+            <div class="bg-emerald-50 p-6 rounded-xl shadow card-hover sr">
+                <h3 class="text-xl font-semibold text-emerald-900">Our Technology</h3>
+                <p class="mt-2 text-gray-700 leading-relaxed">
+                    DiaStagePredict uses trained machine learning models to analyze potential risk factors — transforming
+                    health data patterns into meaningful and understandable insights.
+                </p>
+            </div>
+
+            <div class="bg-emerald-50 p-6 rounded-xl shadow card-hover sr">
+                <h3 class="text-xl font-semibold text-emerald-900">Our Vision</h3>
+                <p class="mt-2 text-gray-700 leading-relaxed">
+                    A future where digital health tools help people understand their risk earlier — enabling healthier
+                    decisions and reducing preventable diabetes-related complications.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="max-w-7xl mx-auto px-6 mb-20">
+        <div class="bg-white p-8 rounded-2xl shadow sr">
+            <h2 class="text-3xl font-bold text-center text-emerald-900">Core Principles</h2>
+            <div class="grid md:grid-cols-3 gap-8 mt-8 sr-stagger">
+                <div class="sr">
+                    <h4 class="font-semibold text-lg text-emerald-900">💙 People-Centered</h4>
+                    <p class="text-gray-700 mt-2">DiaStagePredict exists to support real people in improving their health understanding — not to replace doctors.</p>
+                </div>
+                <div class="sr">
+                    <h4 class="font-semibold text-lg text-emerald-900">🔐 Privacy-Respectful</h4>
+                    <p class="text-gray-700 mt-2">Data sensitivity and confidentiality are treated with care and responsibility at every step.</p>
+                </div>
+                <div class="sr">
+                    <h4 class="font-semibold text-lg text-emerald-900">📊 Science-Guided</h4>
+                    <p class="text-gray-700 mt-2">Our approaches align with research-based understanding and transparent technology design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

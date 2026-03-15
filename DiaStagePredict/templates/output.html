@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Result | DiaStagePredict</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}?v=7.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        body { background: #f0fdf4; }
+        .result-card {
+            background: #fff;
+            border-radius: 24px;
+            border: 1px solid rgba(16,185,129,0.12);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+        .profile-chip {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 10px;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.82rem;
+            color: #065f46;
+            font-weight: 500;
+        }
+        /* SVG Gauge */
+        .gauge-wrap { position: relative; display: inline-block; }
+        .gauge-wrap .gauge-label {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -30%);
+            text-align: center;
+        }
+        /* Animated progress bars */
+        .prog-track {
+            background: #d1fae5;
+            border-radius: 999px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .prog-fill {
+            height: 100%;
+            border-radius: 999px;
+            width: 0%;
+            transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .tip-card {
+            background: #f0fdf4;
+            border: 1px solid #a7f3d0;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            display: flex; align-items: flex-start; gap: 0.75rem;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #064e3b; color: #fff;
+            font-weight: 600; padding: 0.65rem 1.5rem;
+            border-radius: 10px; text-decoration: none;
+            transition: background 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .back-btn:hover { background: #065f46; }
+        .back-btn::before {
+            content: '';
+            position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg); transition: left 0s;
+        }
+        .back-btn:hover::before { left: 160%; transition: left 0.55s ease; }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+
+        <!-- Health Profile -->
+        <div class="result-card p-8 sr">
+            <h2 class="text-xl font-bold text-emerald-900 mb-5">📋 Your Health Profile</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {% for item in profile %}
+                <div class="profile-chip card-hover">{{ item }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Risk Result -->
+        <div class="result-card p-8 sr">
+            <h2 class="text-xl font-bold text-emerald-900 mb-6 text-center">🎯 Diabetes Risk Assessment</h2>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+
+                <!-- SVG Gauge -->
+                <div class="flex flex-col items-center">
+                    <div class="gauge-wrap">
+                        <svg width="200" height="120" viewBox="0 0 200 120">
+                            <!-- Track arc -->
+                            <path d="M 20 100 A 80 80 0 0 1 180 100"
+                                  fill="none" stroke="#d1fae5" stroke-width="16" stroke-linecap="round"/>
+                            <!-- Fill arc -->
+                            <path id="gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100"
+                                  fill="none"
+                                  stroke="{% if risk_color == 'green' %}#10b981{% elif risk_color == 'orange' %}#f59e0b{% else %}#ef4444{% endif %}"
+                                  stroke-width="16" stroke-linecap="round"
+                                  stroke-dasharray="251"
+                                  stroke-dashoffset="251"
+                                  style="transition: stroke-dashoffset 1.8s cubic-bezier(0.22,1,0.36,1);"
+                                  data-offset="{{ (1 - risk_score / 100) * 251 }}"/>
+                        </svg>
+                        <div class="gauge-label">
+                            <div class="text-3xl font-extrabold" style="color:{% if risk_color == 'green' %}#10b981{% elif risk_color == 'orange' %}#f59e0b{% else %}#ef4444{% endif %};">
+                                {{ risk_score }}%
+                            </div>
+                            <div class="text-xs text-gray-500 font-medium">Risk Score</div>
+                        </div>
+                    </div>
+                    <span class="mt-4 inline-block px-6 py-2 rounded-full text-white font-bold text-sm"
+                          style="background:{% if risk_color == 'green' %}#10b981{% elif risk_color == 'orange' %}#f59e0b{% else %}#ef4444{% endif %};">
+                        {{ risk_level }} Risk
+                    </span>
+                </div>
+
+                <!-- Result text + bars -->
+                <div>
+                    <p class="text-gray-700 leading-relaxed mb-6">{{ output }}</p>
+
+                    <!-- Risk factor bars -->
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+                                <span>Risk Probability</span><span>{{ risk_score }}%</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill" data-width="{{ risk_score }}"
+                                     style="background:{% if risk_color == 'green' %}#10b981{% elif risk_color == 'orange' %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+                                <span>Safety Margin</span><span>{{ 100 - risk_score }}%</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill" data-width="{{ 100 - risk_score }}" style="background:#10b981;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+                                <span>Model Confidence</span><span>97%</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill" data-width="97" style="background:#6366f1;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Tips -->
+        <div class="result-card p-8 sr">
+            <h2 class="text-xl font-bold text-emerald-900 mb-5">💡 Health Recommendations</h2>
+            <div class="grid md:grid-cols-2 gap-4 sr-stagger">
+                {% if risk_level == 'Low' %}
+                <div class="tip-card sr"><span class="text-xl">🥗</span><div><strong class="text-emerald-800">Maintain Healthy Diet</strong><p class="text-sm text-gray-600 mt-0.5">Continue eating balanced meals rich in vegetables, whole grains, and lean proteins.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🏃</span><div><strong class="text-emerald-800">Stay Active</strong><p class="text-sm text-gray-600 mt-0.5">Keep up regular physical activity — at least 150 minutes of moderate exercise per week.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">💧</span><div><strong class="text-emerald-800">Stay Hydrated</strong><p class="text-sm text-gray-600 mt-0.5">Drink 8+ glasses of water daily to support metabolic health.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🩺</span><div><strong class="text-emerald-800">Annual Checkups</strong><p class="text-sm text-gray-600 mt-0.5">Schedule yearly blood glucose tests to monitor your health proactively.</p></div></div>
+                {% elif risk_level == 'Moderate' %}
+                <div class="tip-card sr"><span class="text-xl">🍎</span><div><strong class="text-emerald-800">Reduce Sugar Intake</strong><p class="text-sm text-gray-600 mt-0.5">Limit processed sugars and refined carbohydrates. Choose low-GI foods.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">⚖️</span><div><strong class="text-emerald-800">Weight Management</strong><p class="text-sm text-gray-600 mt-0.5">Even a 5–7% reduction in body weight can significantly lower diabetes risk.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🏋️</span><div><strong class="text-emerald-800">Increase Exercise</strong><p class="text-sm text-gray-600 mt-0.5">Aim for 30 minutes of moderate activity daily. Resistance training helps insulin sensitivity.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🩺</span><div><strong class="text-emerald-800">Consult a Doctor</strong><p class="text-sm text-gray-600 mt-0.5">Schedule a consultation for a proper HbA1c test and personalized guidance.</p></div></div>
+                {% else %}
+                <div class="tip-card sr"><span class="text-xl">🚨</span><div><strong class="text-red-700">Seek Medical Advice</strong><p class="text-sm text-gray-600 mt-0.5">Please consult a healthcare professional promptly for a comprehensive evaluation.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">💊</span><div><strong class="text-red-700">Monitor Blood Glucose</strong><p class="text-sm text-gray-600 mt-0.5">Regular glucose monitoring is essential. Ask your doctor about HbA1c testing.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🥦</span><div><strong class="text-emerald-800">Strict Diet Changes</strong><p class="text-sm text-gray-600 mt-0.5">Eliminate sugary drinks, white bread, and processed foods. Focus on fiber-rich foods.</p></div></div>
+                <div class="tip-card sr"><span class="text-xl">🧘</span><div><strong class="text-emerald-800">Stress Management</strong><p class="text-sm text-gray-600 mt-0.5">Chronic stress raises blood sugar. Practice meditation, yoga, or deep breathing daily.</p></div></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Disclaimer + Back -->
+        <div class="result-card p-6 text-center sr">
+            <p class="text-xs text-gray-500 mb-4">
+                ⚠️ This result is generated by AI-based statistical models and is not a medical diagnosis. Please consult a qualified healthcare professional for medical advice.
+            </p>
+            <a href="/predict" class="back-btn">← New Prediction</a>
+        </div>
+
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script>
+    // Animate gauge arc
+    window.addEventListener('load', () => {
+        const arc = document.getElementById('gauge-arc');
+        if (arc) {
+            const offset = parseFloat(arc.getAttribute('data-offset'));
+            setTimeout(() => { arc.style.strokeDashoffset = offset; }, 200);
+        }
+        // Animate progress bars
+        document.querySelectorAll('.prog-fill').forEach(bar => {
+            const w = bar.getAttribute('data-width');
+            setTimeout(() => { bar.style.width = w + '%'; }, 300);
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+
+<nav class="fixed top-0 left-0 right-0 z-50 text-white" style="background:rgba(6,78,59,0.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(110,231,183,0.18);">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between h-16 items-center">
+
+            <!-- Brand -->
+            <a href="/" class="text-xl font-bold tracking-wide flex items-center gap-2">
+                <span class="text-emerald-300">⬡</span>
+                DiaStagePredict
+                <span class="hidden sm:inline text-emerald-400 font-normal text-sm">| Diabetes Risk Predictor</span>
+            </a>
+
+            <!-- Mobile toggle -->
+            <button id="menu-btn" class="md:hidden p-2 rounded-lg hover:bg-white/10 focus:outline-none transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+
+            <!-- Desktop menu -->
+            <ul class="hidden md:flex space-x-1 items-center font-medium">
+                <li><a href="/" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Home</a></li>
+                <li><a href="/about" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">About</a></li>
+
+                <!-- Dropdown -->
+                <li class="relative dropdown-group">
+                    <button class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 flex items-center gap-1 transition-colors dropdown-trigger">
+                        Machine Learning
+                        <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu absolute top-full left-0 rounded-xl shadow-2xl py-2 w-48 mt-1">
+                        <li><a href="/model" class="flex items-center gap-2 px-4 py-2.5 hover:bg-white/10 rounded-lg mx-1 transition-colors text-sm">🤖 Models</a></li>
+                        <li><a href="/result" class="flex items-center gap-2 px-4 py-2.5 hover:bg-white/10 rounded-lg mx-1 transition-colors text-sm">📊 Result</a></li>
+                    </ul>
+                </li>
+
+                {% if session.get('logged') %}
+                <li><a href="/predict" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Predict</a></li>
+                <li><a href="/logout" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Logout</a></li>
+                {% else %}
+                <li>
+                    <a href="/login" class="liquid ml-2 bg-emerald-500 hover:bg-emerald-400 px-5 py-2 rounded-full font-semibold card-hover inline-block transition-colors shadow-lg">
+                        Login
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden" style="background:rgba(6,78,59,0.95);border-top:1px solid rgba(110,231,183,0.15);">
+        <ul class="px-4 py-3 space-y-1">
+            <li><a href="/" class="block px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Home</a></li>
+            <li><a href="/about" class="block px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">About</a></li>
+            <li>
+                <details class="text-white">
+                    <summary class="cursor-pointer px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">Machine Learning</summary>
+                    <ul class="ml-4 mt-1 space-y-1">
+                        <li><a href="/model" class="block px-3 py-2 rounded-lg hover:text-emerald-300 transition-colors text-sm">🤖 Models</a></li>
+                        <li><a href="/result" class="block px-3 py-2 rounded-lg hover:text-emerald-300 transition-colors text-sm">📊 Result</a></li>
+                    </ul>
+                </details>
+            </li>
+            {% if session.get('logged') %}
+            <li><a href="/predict" class="block px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Predict</a></li>
+            <li><a href="/logout" class="block px-3 py-2 rounded-lg hover:bg-white/10 hover:text-emerald-300 transition-colors">Logout</a></li>
+            {% else %}
+            <li><a href="/login" class="block px-3 py-2 rounded-lg hover:text-emerald-300 transition-colors">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Spacer so content doesn't hide under fixed nav -->
+<div class="h-16"></div>
+
+<script>
+    document.getElementById("menu-btn").addEventListener("click", () => {
+        document.getElementById("mobile-menu").classList.toggle("hidden");
+    });
+</script>

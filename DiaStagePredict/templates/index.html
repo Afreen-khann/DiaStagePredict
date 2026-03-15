@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DiaStagePredict | Diabetes Risk Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}?v=7.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        body { background: #f0fdf4; }
+        .hero-bg {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 40%, #047857 70%, #059669 100%);
+            min-height: 88vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(16,185,129,0.18) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+        }
+        .feature-card {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid rgba(16,185,129,0.12);
+            transition: box-shadow 0.3s ease;
+        }
+        .step-circle {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem; color: #fff;
+            margin: 0 auto;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.35);
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    {% include 'navbar.html' %}
+
+    <!-- HERO -->
+    <section class="hero-bg text-white">
+        <div class="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+
+            <!-- Left -->
+            <div class="hero-content">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-emerald-200 mb-6">
+                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                    AI-Powered Health Analysis
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+                    <span id="typing-text" data-text="Predict Diabetes Risk with AI"></span>
+                </h1>
+                <p class="mt-2 text-2xl md:text-3xl font-light text-emerald-200">Stay Ahead of Your Health</p>
+                <p class="mt-5 text-emerald-100 text-lg leading-relaxed max-w-lg">
+                    DiaStagePredict analyzes your health indicators using machine learning to estimate diabetes risk — so you can take informed preventive action.
+                </p>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    {% if session.get('logged') %}
+                    <a href="/predict" class="liquid btn-pulse inline-flex items-center gap-2 bg-white text-emerald-900 font-bold px-8 py-3.5 rounded-xl shadow-xl text-base">
+                        🔬 Start Prediction
+                    </a>
+                    {% else %}
+                    <a href="/login" class="liquid btn-pulse inline-flex items-center gap-2 bg-white text-emerald-900 font-bold px-8 py-3.5 rounded-xl shadow-xl text-base">
+                        🔐 Login to Begin
+                    </a>
+                    {% endif %}
+                    <a href="/model" class="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors text-base">
+                        🤖 View Models
+                    </a>
+                </div>
+
+                <!-- Stats row -->
+                <div class="mt-10 grid grid-cols-3 gap-3">
+                    <div class="stat-card px-4 py-3 text-center">
+                        <div class="text-2xl font-bold text-emerald-300">97%</div>
+                        <div class="text-xs text-emerald-200 mt-0.5">Accuracy</div>
+                    </div>
+                    <div class="stat-card px-4 py-3 text-center">
+                        <div class="text-2xl font-bold text-emerald-300">6+</div>
+                        <div class="text-xs text-emerald-200 mt-0.5">ML Models</div>
+                    </div>
+                    <div class="stat-card px-4 py-3 text-center">
+                        <div class="text-2xl font-bold text-emerald-300">10k+</div>
+                        <div class="text-xs text-emerald-200 mt-0.5">Data Points</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: illustration + orbit -->
+            <div class="hero-content-delay flex justify-center">
+                <div class="orbit-container">
+                    <img src="{{ url_for('static', filename='images/bg/bg (1).jpg') }}"
+                         alt="Diabetes AI Prediction"
+                         class="hero-parallax rounded-3xl shadow-2xl max-h-[420px] w-full object-cover"
+                         style="border:2px solid rgba(110,231,183,0.25);">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="max-w-7xl mx-auto px-6 py-16">
+        <div class="text-center mb-12 sr">
+            <h2 class="text-3xl md:text-4xl font-bold text-emerald-900">Why DiaStagePredict?</h2>
+            <p class="mt-3 text-gray-500 max-w-xl mx-auto">Built with real clinical data and modern ML to give you meaningful health insights.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6 sr-stagger">
+            <div class="feature-card p-7 card-hover sr">
+                <div class="text-3xl mb-4">🧠</div>
+                <h3 class="text-xl font-bold text-emerald-900">AI-Driven Insights</h3>
+                <p class="mt-2 text-gray-600 leading-relaxed">Multiple ML models identify risk trends from your lifestyle and health metrics with high accuracy.</p>
+            </div>
+            <div class="feature-card p-7 card-hover sr">
+                <div class="text-3xl mb-4">⚡</div>
+                <h3 class="text-xl font-bold text-emerald-900">Instant Results</h3>
+                <p class="mt-2 text-gray-600 leading-relaxed">Get your risk score in seconds with a clear visual breakdown and personalized health tips.</p>
+            </div>
+            <div class="feature-card p-7 card-hover sr">
+                <div class="text-3xl mb-4">🔒</div>
+                <h3 class="text-xl font-bold text-emerald-900">Privacy First</h3>
+                <p class="mt-2 text-gray-600 leading-relaxed">Your health data is handled with full confidentiality. No data is shared or stored beyond your session.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="bg-emerald-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12 sr">
+                <h2 class="text-3xl md:text-4xl font-bold">How It Works</h2>
+                <p class="mt-3 text-emerald-200">Three simple steps to your diabetes risk assessment</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 sr-stagger">
+                <div class="text-center sr">
+                    <div class="step-circle">1</div>
+                    <h4 class="mt-5 font-bold text-lg">Enter Health Details</h4>
+                    <p class="text-emerald-200 mt-2 text-sm leading-relaxed">Provide 8 basic health metrics through our guided form — takes under 2 minutes.</p>
+                </div>
+                <div class="text-center sr">
+                    <div class="step-circle">2</div>
+                    <h4 class="mt-5 font-bold text-lg">AI Analyzes Risk</h4>
+                    <p class="text-emerald-200 mt-2 text-sm leading-relaxed">Our ensemble ML model processes your data and calculates a precise risk probability.</p>
+                </div>
+                <div class="text-center sr">
+                    <div class="step-circle">3</div>
+                    <h4 class="mt-5 font-bold text-lg">Receive Your Result</h4>
+                    <p class="text-emerald-200 mt-2 text-sm leading-relaxed">View your risk score, visual gauge, and actionable health recommendations.</p>
+                </div>
+            </div>
+            <div class="text-center mt-12 sr">
+                {% if session.get('logged') %}
+                <a href="/predict" class="liquid inline-flex items-center gap-2 bg-white text-emerald-900 font-bold px-8 py-3.5 rounded-xl shadow-xl">
+                    🔬 Start Your Assessment
+                </a>
+                {% else %}
+                <a href="/login" class="liquid inline-flex items-center gap-2 bg-white text-emerald-900 font-bold px-8 py-3.5 rounded-xl shadow-xl">
+                    🔐 Get Started Free
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>

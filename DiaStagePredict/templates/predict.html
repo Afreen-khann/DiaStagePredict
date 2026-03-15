@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Predict | DiaStagePredict</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}?v=7.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 40%, #047857 70%, #f0fdf4 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16,185,129,0.15);
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        }
+        .form-field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-field input {
+            width: 100%;
+            border: 1.5px solid #d1fae5;
+            border-radius: 10px;
+            padding: 0.65rem 0.9rem;
+            font-size: 0.95rem;
+            color: #1f2937;
+            background: #f0fdf4;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+            outline: none;
+        }
+        .form-field input:focus {
+            border-color: #10b981;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.18);
+        }
+        .form-field input:hover:not(:focus) { border-color: #6ee7b7; }
+        .hint { font-size: 0.72rem; color: #6b7280; margin-top: 3px; }
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.85rem 2.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(16,185,129,0.4);
+            transition: opacity 0.2s, box-shadow 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .submit-btn:hover { opacity: 0.92; box-shadow: 0 6px 28px rgba(16,185,129,0.5); }
+        .submit-btn::before {
+            content: '';
+            position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg); transition: left 0s;
+        }
+        .submit-btn:hover::before { left: 160%; transition: left 0.55s ease; }
+        .section-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #ecfdf5; color: #065f46;
+            font-size: 0.78rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 999px;
+            border: 1px solid #a7f3d0;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <!-- Header -->
+        <div class="text-center mb-8 hero-content">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white">Diabetes Risk Assessment</h1>
+            <p class="mt-2 text-emerald-200">Enter your health metrics below for an AI-powered risk estimate</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="glass-card p-8 md:p-10 hero-content-delay">
+
+            <form action="/output" method="post">
+
+                <!-- BMI Calculator -->
+                <div class="mb-8">
+                    <div class="section-badge">⚖️ BMI Calculator (Optional)</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label for="Height">Height (cm)</label>
+                            <input type="number" name="Height" id="Height" placeholder="e.g. 170"/>
+                            <p class="hint">Typical: 50–250 cm</p>
+                        </div>
+                        <div class="form-field">
+                            <label for="Weight">Weight (kg)</label>
+                            <input type="number" name="Weight" id="Weight" placeholder="e.g. 70"/>
+                            <p class="hint">Typical: 20–300 kg</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8 Core Inputs — 2×4 grid -->
+                <div class="mb-8">
+                    <div class="section-badge">🩺 Health Metrics</div>
+                    <div class="grid grid-cols-2 md:grid-cols-2 gap-5">
+
+                        <div class="form-field">
+                            <label for="Pregnancies">Pregnancies</label>
+                            <input type="number" name="Pregnancies" id="Pregnancies" placeholder="e.g. 2" required/>
+                            <p class="hint">Typical: 0–17</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="Glucose">Glucose (mg/dL)</label>
+                            <input type="number" name="Glucose" id="Glucose" placeholder="e.g. 120" required/>
+                            <p class="hint">Normal fasting: 70–125</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="BloodPressure">Blood Pressure (mm Hg)</label>
+                            <input type="number" name="BloodPressure" id="BloodPressure" placeholder="e.g. 80" required/>
+                            <p class="hint">Normal diastolic: 60–80</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="SkinThickness">Skin Thickness (mm)</label>
+                            <input type="number" name="SkinThickness" id="SkinThickness" placeholder="e.g. 20" required/>
+                            <p class="hint">Typical: 7–99 mm</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="Insulin">Insulin (IU/mL)</label>
+                            <input type="number" name="Insulin" id="Insulin" placeholder="e.g. 80" required/>
+                            <p class="hint">Typical: 15–276 IU/mL</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="BMI">BMI</label>
+                            <input type="number" step="0.1" name="BMI" id="BMI" placeholder="e.g. 23.5" required/>
+                            <p class="hint">Healthy: 18.5–24.9</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function</label>
+                            <input type="number" step="0.001" name="DiabetesPedigreeFunction" id="DiabetesPedigreeFunction" placeholder="e.g. 0.5" required/>
+                            <p class="hint">Typical: 0.078–2.42</p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="Age">Age (years)</label>
+                            <input type="number" name="Age" id="Age" placeholder="e.g. 35" required/>
+                            <p class="hint">Typical: 21–81 years</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="flex justify-center">
+                    <button type="submit" class="submit-btn">🔬 Analyze My Risk</button>
+                </div>
+
+            </form>
+
+            <p class="text-xs text-gray-400 text-center mt-6">
+                ⚠️ This tool provides AI-based risk estimation only and does not replace professional medical advice.
+            </p>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/bmi-calculator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loading-manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script>new BMICalculator();</script>
+</body>
+</html>

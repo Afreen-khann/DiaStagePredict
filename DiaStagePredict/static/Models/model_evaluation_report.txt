@@ -1,0 +1,45 @@
+======================================================================
+MODEL EVALUATION REPORT
+======================================================================
+Generated: 2026-03-12 22:07:36
+Scikit-learn version: 1.8.0
+Random seed: 42
+
+Dataset Statistics:
+  Total samples: 10768
+  Training samples: 8614
+  Test samples: 2154
+  Class distribution: {0: 6967, 1: 3801}
+
+Missing Value Imputation:
+  Glucose: zeros replaced with median 119.90
+  BloodPressure: zeros replaced with median 77.50
+  SkinThickness: zeros replaced with median 26.75
+  Insulin: zeros replaced with median 140.30
+  BMI: zeros replaced with median 28.50
+
+Model Performance:
+Model                          Accuracy   Precision  Recall     F1-Score  
+----------------------------------------------------------------------
+RandomForestClassifier         0.9712     0.9716     0.9461     0.9587     <- BEST
+LogisticRegression             0.9396     0.9280     0.8987     0.9131    
+GradientBoostingClassifier     0.9712     0.9716     0.9461     0.9587    
+
+Best Model: RandomForestClassifier
+
+Confusion Matrix (Best Model):
+              Predicted
+              0    1
+Actual  0   [1373   21]
+        1   [  41  719]
+
+Feature Importance (RandomForestClassifier):
+  1. Glucose: 0.3549
+  2. BMI: 0.1942
+  3. Pregnancies: 0.1518
+  4. DiabetesPedigreeFunction: 0.0865
+  5. Insulin: 0.0797
+  6. Age: 0.0571
+  7. BloodPressure: 0.0446
+  8. SkinThickness: 0.0311
+======================================================================
